@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Telegram Pong — Vertical (P2P)</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root{--bg:#0f1115;--panel:#151a24;--muted:#9aa4b2;--acc:#4f8cff}
+    html,body{margin:0;height:100%;background:#000;color:#fff;overflow:hidden;font-family:system-ui, -apple-system, Segoe UI, Roboto, Inter, Helvetica, Arial, sans-serif}
+    canvas{display:block;width:100vw;height:100vh;background:#000}
+    .menu{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg, rgba(10,12,18,.9), rgba(10,12,18,.85));backdrop-filter:blur(6px)}
+    .card{width:min(720px,92vw);background:#0f1115;border:1px solid #1d2333;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.5);padding:16px}
+    .row{display:flex;gap:8px;flex-wrap:wrap}
+    h1{font-size:18px;margin:0 0 10px;font-weight:700}
+    .muted{color:var(--muted);font-size:12px}
+    textarea{width:100%;min-height:110px;background:#0b1020;border:1px solid #222a3c;border-radius:12px;color:#eaf1ff;padding:10px}
+    button{appearance:none;border:0;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer}
+    .primary{background:var(--acc);color:#fff}
+    .secondary{background:#1f2533;color:#eaf1ff}
+    label{font-size:12px;color:var(--muted);display:block;margin:8px 0 6px}
+    .tabs{display:flex;gap:8px;margin:8px 0 12px}
+    .tab{padding:8px 12px;border-radius:999px;background:#1b2130;color:#cfd8ef;cursor:pointer;font-weight:700}
+    .tab.active{background:#28406f;color:#fff}
+    .hidden{display:none}
+    .status{font-size:12px;color:#cfd8ef}
+  </style>
+</head>
+<body>
+  <canvas id="game"></canvas>
+
+  <!-- MENU / MANUAL SIGNALING -->
+  <div class="menu" id="menu">
+    <div class="card">
+      <h1>Telegram Pong — подключение к другу</h1>
+      <div class="muted" style="margin-bottom:10px">Сначала установите соединение P2P (WebRTC). После подключения игра откроется на весь экран. Обмен кодами временно вручную (для теста).</div>
+
+      <div class="tabs">
+        <div class="tab active" id="tabHost">Я создаю матч</div>
+        <div class="tab" id="tabJoin">Я присоединяюсь</div>
+        <div style="flex:1"></div>
+        <span class="status" id="net">offline</span>
+      </div>
+
+      <!-- HOST PANEL -->
+      <div id="hostPanel">
+        <label>1) Отправь другу этот <b>offer</b>-код</label>
+        <textarea id="offerOut" readonly></textarea>
+        <div class="row" style="margin:6px 0 10px">
+          <button class="secondary" id="copyOffer">Скопировать</button>
+          <button class="secondary" id="shareOffer">Поделиться в Telegram</button>
+          <button class="primary" id="makeOffer">Создать offer</button>
+        </div>
+        <label>2) Получи от друга <b>answer</b> и вставь сюда</label>
+        <textarea id="answerIn" placeholder="Вставь answer от друга"></textarea>
+        <div class="row" style="margin-top:6px"><button class="primary" id="applyAnswer">Применить answer</button></div>
+      </div>
+
+      <!-- JOIN PANEL -->
+      <div id="joinPanel" class="hidden">
+        <label>1) Вставь сюда <b>offer</b>-код от хоста</label>
+        <textarea id="offerIn" placeholder="Вставь offer от хоста"></textarea>
+        <div class="row" style="margin:6px 0 10px"><button class="primary" id="makeAnswer">Сгенерировать answer</button></div>
+        <label>2) Отправь этот <b>answer</b> хосту</label>
+        <textarea id="answerOut" readonly></textarea>
+        <div class="row" style="margin-top:6px"><button class="secondary" id="copyAnswer">Скопировать answer</button></div>
+      </div>
+
+      <div class="muted" style="margin-top:8px">Подсказка: это версия без сервера для бесплатного теста. В проде добавим авто-инвайт через сигналинг (WS/Workers).</div>
+    </div>
+  </div>
+
+  <script>
+  // --- Telegram fullscreen
+  const tg = window.Telegram?.WebApp; try{ tg?.expand(); tg?.ready(); }catch(_){}
+
+  // --- Canvas setup
+  const cvs = document.getElementById('game');
+  const ctx = cvs.getContext('2d');
+  let W,H; function resize(){ W=cvs.width=innerWidth; H=cvs.height=innerHeight; } window.addEventListener('resize',resize); resize();
+
+  // --- UI elements
+  const menu = document.getElementById('menu');
+  const tabHost = document.getElementById('tabHost');
+  const tabJoin = document.getElementById('tabJoin');
+  const hostPanel = document.getElementById('hostPanel');
+  const joinPanel = document.getElementById('joinPanel');
+  const net = document.getElementById('net');
+
+  const offerOut = document.getElementById('offerOut');
+  const answerIn = document.getElementById('answerIn');
+  const offerIn = document.getElementById('offerIn');
+  const answerOut = document.getElementById('answerOut');
+  const btnCopyOffer = document.getElementById('copyOffer');
+  const btnShareOffer = document.getElementById('shareOffer');
+  const btnMakeOffer = document.getElementById('makeOffer');
+  const btnApplyAnswer = document.getElementById('applyAnswer');
+  const btnMakeAnswer = document.getElementById('makeAnswer');
+  const btnCopyAnswer = document.getElementById('copyAnswer');
+
+  // --- Helpers
+  const enc = obj => btoa(unescape(encodeURIComponent(JSON.stringify(obj))));
+  const dec = str => JSON.parse(decodeURIComponent(escape(atob((str||'').trim()))));
+  function copy(el){ el.select(); document.execCommand('copy'); }
+
+  // --- Tabs
+  tabHost.onclick = ()=>{ tabHost.classList.add('active'); tabJoin.classList.remove('active'); hostPanel.classList.remove('hidden'); joinPanel.classList.add('hidden'); };
+  tabJoin.onclick = ()=>{ tabJoin.classList.add('active'); tabHost.classList.remove('active'); joinPanel.classList.remove('hidden'); hostPanel.classList.add('hidden'); };
+
+  // --- Game constants (vertical)
+  const PADDLE_W = 120, PADDLE_H = 12, BALL = 12;
+  const player = {x:0, y:0, score:0};
+  const enemy  = {x:0, y:0, score:0};
+  const ball   = {x:0, y:0, vx:0, vy:0};
+  let mode = 'menu'; // menu | online
+  let isHost = false; // host runs physics
+
+  function resetPositions(){
+    player.x = W/2 - PADDLE_W/2; player.y = H - 28;
+    enemy.x  = W/2 - PADDLE_W/2; enemy.y  = 16;
+    ball.x = W/2; ball.y = H/2; ball.vx = (Math.random()>0.5?1:-1)*(3+Math.random()*2); ball.vy = (isHost?1:-1)*(3+Math.random()*2);
+  }
+  resetPositions();
+
+  // --- Input
+  let keys = {}; window.addEventListener('keydown', e=>keys[e.key]=true); window.addEventListener('keyup', e=>keys[e.key]=false);
+  cvs.addEventListener('pointermove', e=>{
+    if (mode!=='online') return;
+    const r=cvs.getBoundingClientRect(); const x=(e.clientX - r.left)*(W/r.width) - PADDLE_W/2;
+    // Локально всегда двигаем «нижнюю» ракетку
+    player.x = Math.max(0, Math.min(W-PADDLE_W, x));
+  });
+
+  function localStep(){
+    if (mode!=='online') return;
+    if (keys['ArrowLeft']||keys['a']) player.x -= 7;
+    if (keys['ArrowRight']||keys['d']) player.x += 7;
+    player.x = Math.max(0, Math.min(W-PADDLE_W, player.x));
+  }
+
+  // --- WebRTC
+  let pc, dc; let lastTick=0;
+  function setupPeer(host){
+    isHost = !!host;
+    pc = new RTCPeerConnection({iceServers:[{urls:'stun:stun.l.google.com:19302'}]});
+    pc.onicecandidate = e=>{ if(!e.candidate) updateSDP(); };
+    pc.onconnectionstatechange = ()=> net.textContent = pc.connectionState || 'unknown';
+    pc.ondatachannel = ev=>{ dc = ev.channel; wireDC(); };
+    if (host){ dc = pc.createDataChannel('game'); wireDC(); }
+  }
+  function wireDC(){
+    dc.onopen = ()=>{ net.textContent = 'online'; startMatch(); };
+    dc.onclose = ()=>{ net.textContent = 'disconnected'; endMatch(); };
+    dc.onmessage = ev=>{
+      const m = JSON.parse(ev.data);
+      if (m.t==='state' && !isHost){ Object.assign(player, m.state.playerTop ? m.state.bottom : m.state.bottom); /* placeholder */ }
+      if (m.t==='state' && !isHost){ // гостю присылаем полное состояние
+        // Стороны в физике: у хоста bottom=host, top=guest. У гостя рендерим наоборот: локальный снизу.
+        const s = m.state;
+        // на госте «player» = нижний (это топ в физике), «enemy» = верхний (боттом в физике)
+        enemy.x = s.bottom.x; enemy.y = 16; enemy.score = s.bottom.score;
+        player.x = s.top.x;   player.y = H - 28; player.score = s.top.score;
+        ball.x = s.ball.x; ball.y = s.ball.y; // для гостя координаты одинаковые
+      }
+      if (m.t==='input' && isHost){ // пришёл x от гостя (это верхняя ракетка в физике)
+        enemy.x = Math.max(0, Math.min(W-PADDLE_W, m.x));
+      }
+    };
+  }
+
+  function updateSDP(){
+    if (!pc?.localDescription) return;
+    const payload = enc({type:pc.localDescription.type, sdp:pc.localDescription.sdp});
+    if (isHost) offerOut.value = payload; else answerOut.value = payload;
+  }
+
+  async function makeOffer(){ setupPeer(true); const offer = await pc.createOffer(); await pc.setLocalDescription(offer); updateSDP(); }
+  async function applyAnswer(){ try{ const ans = dec(answerIn.value); await pc.setRemoteDescription(new RTCSessionDescription(ans)); }catch(e){ alert('Неверный answer'); } }
+  async function acceptOffer(){ try{ setupPeer(false); const off = dec(offerIn.value); await pc.setRemoteDescription(new RTCSessionDescription(off)); const ans = await pc.createAnswer(); await pc.setLocalDescription(ans); updateSDP(); }catch(e){ alert('Неверный offer'); } }
+
+  btnMakeOffer.onclick = makeOffer;
+  btnApplyAnswer.onclick = applyAnswer;
+  btnMakeAnswer.onclick = acceptOffer;
+  btnCopyOffer.onclick = ()=>copy(offerOut);
+  btnCopyAnswer.onclick = ()=>copy(answerOut);
+  btnShareOffer.onclick = ()=>{
+    const text = encodeURIComponent('Подключись ко мне в Pong. Вставь мой offer и пришли answer.\n\n'+offerOut.value.substring(0,1800));
+    if (tg && tg.openTelegramLink) tg.openTelegramLink('https://t.me/share/url?text='+text); else window.open('https://t.me/share/url?text='+text,'_blank');
+  };
+
+  // --- Game physics runs on host only
+  function physics(){
+    // move ball
+    ball.x += ball.vx; ball.y += ball.vy;
+    // walls (X)
+    if (ball.x<0 || ball.x>W-BALL) ball.vx *= -1;
+    // top paddle (guest)
+    if (ball.vy<0 && ball.y < enemy.y+PADDLE_H && ball.x+BALL>enemy.x && ball.x<enemy.x+PADDLE_W){ ball.vy = Math.abs(ball.vy); }
+    // bottom paddle (host)
+    if (ball.vy>0 && ball.y+BALL > player.y && ball.x+BALL>player.x && ball.x<player.x+PADDLE_W){ ball.vy = -Math.abs(ball.vy); }
+    // score
+    if (ball.y < -BALL){ player.score++; resetBall(1); }
+    if (ball.y > H+BALL){ enemy.score++; resetBall(-1); }
+  }
+  function resetBall(dir){ ball.x=W/2; ball.y=H/2; ball.vx=(Math.random()>0.5?1:-1)*(3+Math.random()*2); ball.vy=dir*(3+Math.random()*2); }
+
+  function startMatch(){ mode='online'; menu.classList.add('hidden'); tg?.expand(); resetPositions(); lastTick=0; }
+  function endMatch(){ mode='menu'; menu.classList.remove('hidden'); }
+
+  // --- Main loop
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle='#fff';
+    // paddles
+    ctx.fillRect(player.x, player.y, PADDLE_W, PADDLE_H);
+    ctx.fillRect(enemy.x, enemy.y, PADDLE_W, PADDLE_H);
+    // ball
+    ctx.fillRect(ball.x, ball.y, BALL, BALL);
+    // score
+    ctx.font='20px sans-serif';
+    ctx.fillText(player.score, 16, H-20);
+    ctx.fillText(enemy.score, 16, 36);
+  }
+
+  function loop(ts){
+    // controls (both sides move local bottom paddle)
+    localStep();
+
+    if (mode==='online'){
+      // Send my input each frame
+      if (dc && dc.readyState==='open'){
+        // У хоста локальный — нижний (bottom). У гостя локальный снизу тоже, но для физики это top => отправляем как top.x
+        const myX = player.x;
+        dc.send(JSON.stringify({t:'input', x: myX}));
+      }
+      if (isHost){
+        physics();
+        // 30 FPS state to guest
+        if (!lastTick || ts-lastTick>33){ lastTick=ts; if (dc && dc.readyState==='open'){
+          const state = { bottom:{x:player.x, score:player.score}, top:{x:enemy.x, score:enemy.score}, ball:{x:ball.x, y:ball.y} };
+          dc.send(JSON.stringify({t:'state', state}));
+        } }
+      }
+    }
+    draw();
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+  </script>
+</body>
+</html>
