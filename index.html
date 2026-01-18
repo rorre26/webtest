@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Онлайн запись поставок на склад</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header>
+        <div>
+          <p class="subtitle">Планирование и архивирование поставок</p>
+          <h1>Онлайн запись поставок на склад</h1>
+        </div>
+        <div class="header-actions">
+          <button id="exportCsv" class="ghost">Экспорт в Excel (CSV)</button>
+          <button id="clearAll" class="danger">Очистить график</button>
+        </div>
+      </header>
+
+      <section class="card">
+        <h2>Создать запись</h2>
+        <form id="bookingForm">
+          <div class="grid">
+            <label>
+              ФИО сотрудника
+              <input type="text" name="employee" placeholder="Иванов И.И." required />
+            </label>
+            <label>
+              Поставщик
+              <input type="text" name="supplier" placeholder="ООО Логистика" required />
+            </label>
+            <label>
+              Дата поставки
+              <input type="date" name="date" required />
+            </label>
+            <label>
+              Время
+              <input type="time" name="time" required />
+            </label>
+            <label>
+              Кол-во паллет
+              <input type="number" name="pallets" min="1" value="1" required />
+            </label>
+            <label>
+              Контактный телефон
+              <input type="tel" name="phone" placeholder="+7 900 000-00-00" required />
+            </label>
+          </div>
+          <label class="full">
+            Комментарий
+            <textarea name="comment" rows="3" placeholder="Особые условия разгрузки"></textarea>
+          </label>
+          <div class="form-actions">
+            <button type="submit" class="primary">Добавить в график</button>
+            <button type="reset" class="ghost">Очистить форму</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="card">
+        <div class="section-header">
+          <h2>График поставок</h2>
+          <div class="legend">
+            <span class="badge">Доступно всем пользователям</span>
+            <span class="badge ghost">Хранится локально (демо)</span>
+          </div>
+        </div>
+        <div id="schedule" class="schedule"></div>
+      </section>
+
+      <section class="card info">
+        <h2>Как работает процесс</h2>
+        <ol>
+          <li>Сотрудник назначает дату поставки и добавляет запись в график.</li>
+          <li>Запись отображается в общем расписании и доступна всем пользователям.</li>
+          <li>При необходимости архив выгружается в Excel (CSV) для хранения.</li>
+        </ol>
+      </section>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
