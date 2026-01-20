@@ -84,8 +84,10 @@ def schedule():
     if request.method == "POST" and session.get("role") == "office":
         car_number = request.form.get("car_number", "").strip()
         cargo_type = request.form.get("cargo_type", "").strip()
+        arrival_date = request.form.get("arrival_date", "").strip()
         arrival_time = request.form.get("arrival_time", "").strip()
-        if car_number and cargo_type and arrival_time:
+        if car_number and cargo_type and arrival_date and arrival_time:
+            arrival_at = f"{arrival_date} {arrival_time}"
             db = get_db()
             db.execute(
                 """
@@ -95,7 +97,7 @@ def schedule():
                 (
                     car_number,
                     cargo_type,
-                    arrival_time,
+                    arrival_at,
                     session["user"],
                     datetime.utcnow().isoformat(timespec="seconds"),
                 ),

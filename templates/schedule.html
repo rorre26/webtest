@@ -23,6 +23,18 @@
         <span class="status-pill">Онлайн</span>
       </div>
 
+      <div class="calendar">
+        <div class="calendar-header">
+          <button class="icon-btn" type="button" id="prevMonth">‹</button>
+          <div>
+            <h3 id="calendarTitle">Месяц</h3>
+            <p>Выберите дату для новой поставки</p>
+          </div>
+          <button class="icon-btn" type="button" id="nextMonth">›</button>
+        </div>
+        <div class="calendar-grid" id="calendarGrid"></div>
+      </div>
+
       <div class="grid">
         {% for delivery in deliveries %}
           <article class="card">
@@ -60,6 +72,11 @@
       </div>
       {% if role == 'office' %}
         <form method="post" class="form">
+          <div class="selected-date">
+            <span>Выбранная дата:</span>
+            <strong id="selectedDateLabel">—</strong>
+          </div>
+          <input type="hidden" name="arrival_date" id="arrivalDate" required />
           <label>
             Номер автомобиля
             <input type="text" name="car_number" placeholder="Например, А123ВС" required />
@@ -70,7 +87,7 @@
           </label>
           <label>
             Время приезда водителя
-            <input type="datetime-local" name="arrival_time" required />
+            <input type="time" name="arrival_time" required />
           </label>
           <button class="primary-btn" type="submit">Добавить в график</button>
         </form>
@@ -84,5 +101,6 @@
   </main>
 
   <script type="module" src="{{ url_for('static', filename='three-bg.js') }}"></script>
+  <script src="{{ url_for('static', filename='calendar.js') }}"></script>
 </body>
 </html>
