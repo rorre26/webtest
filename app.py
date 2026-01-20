@@ -55,7 +55,12 @@ def close_db(exception):
         db.close()
 
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/", methods=["GET"])
+def home():
+    return render_template("home.html")
+
+
+@app.route("/login", methods=["GET", "POST"])
 def login():
     error = None
     if request.method == "POST":

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>График поставок — Главная</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+</head>
+<body class="home-page">
+  <canvas id="bg"></canvas>
+  <main class="home-hero">
+    <div class="glass-card hero-card">
+      <img
+        src="{{ url_for('static', filename='logo-icover.svg') }}"
+        alt="iCover"
+        class="hero-logo"
+      />
+      <h1>График поставок</h1>
+      <p>
+        Планируйте поставки, выбирайте даты в календаре и подтверждайте прием на складе —
+        все в одном современном интерфейсе.
+      </p>
+      <div class="hero-actions">
+        <a class="primary-btn" href="{{ url_for('login') }}">Перейти к входу</a>
+        <a class="secondary-btn" href="#features">Посмотреть возможности</a>
+      </div>
+    </div>
+
+    <div class="glass-card hero-card" id="features">
+      <h2>Что умеет система</h2>
+      <ul class="feature-list">
+        <li>Календарь всегда на виду — выбор даты одним кликом.</li>
+        <li>Роли для офиса и склада с быстрым подтверждением поставок.</li>
+        <li>Хранение данных в SQLite без сложной настройки.</li>
+        <li>Интерфейс Liquid Glass для современного UX.</li>
+      </ul>
+    </div>
+  </main>
+
+  <script type="module" src="{{ url_for('static', filename='three-bg.js') }}"></script>
+</body>
+</html>

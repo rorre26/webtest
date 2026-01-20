@@ -17,7 +17,7 @@
       </div>
     </div>
 
-    <form method="post" class="form">
+    <form method="post" action="{{ url_for('login') }}" class="form">
       <label>
         Логин
         <input type="text" name="username" placeholder="Введите логин" required />
@@ -39,6 +39,7 @@
         <li>warehouse_user / warehouse123 — склад</li>
       </ul>
     </div>
+    <a class="secondary-btn link-btn" href="{{ url_for('home') }}">На главную</a>
   </div>
 
   <script type="module" src="{{ url_for('static', filename='three-bg.js') }}"></script>
