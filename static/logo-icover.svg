@@ -9,5 +9,5 @@
     </filter>
   </defs>
   <rect width="520" height="140" rx="32" fill="rgba(255,255,255,0.0)" />
-  <text x="40" y="100" font-family="'Inter', 'Segoe UI', sans-serif" font-size="80" font-weight="700" fill="url(#glass)" filter="url(#text-shadow)">iCOVER</text>
+  <text x="50%" y="100" text-anchor="middle" font-family="'F37 Bolton', 'Inter', 'Segoe UI', sans-serif" font-size="96" font-weight="700" fill="url(#glass)" filter="url(#text-shadow)">iCOVER</text>
 </svg>
