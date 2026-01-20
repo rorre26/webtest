@@ -361,68 +361,87 @@ input {
 
 .home-page {
   min-height: 100vh;
+  background: #1f6ff2;
+  color: #ffffff;
+}
+
+.home-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28px 36px;
+  text-transform: lowercase;
+  font-size: 18px;
+  letter-spacing: 0.5px;
+}
+
+.home-brand {
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.home-nav {
+  display: flex;
+  gap: 18px;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.home-nav a {
+  color: #ffffff;
+  text-decoration: none;
+  opacity: 0.9;
 }
 
 .home-hero {
   position: relative;
   z-index: 1;
-  width: min(980px, 100%);
+  width: min(1200px, 100%);
   margin: 0 auto;
   display: grid;
-  gap: 24px;
-}
-
-.home-hero.centered {
-  min-height: calc(100vh - 96px);
+  gap: 32px;
   align-items: center;
+  justify-items: center;
+  padding: 40px 24px 80px;
 }
 
-.hero-card {
-  width: 100%;
-}
-
-.auth-card {
-  max-width: 560px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.hero-logo {
-  width: min(360px, 100%);
-  margin-bottom: 16px;
-}
-
-.hero-card h1 {
-  font-size: clamp(28px, 5vw, 40px);
-  margin-bottom: 12px;
-}
-
-.hero-card p {
-  color: var(--muted);
-  line-height: 1.6;
-}
-
-.hero-actions {
+.flower-wrap {
+  width: min(700px, 90vw);
   display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 20px;
   justify-content: center;
 }
 
-.feature-list {
-  display: grid;
-  gap: 10px;
-  padding-left: 18px;
-  color: var(--muted);
+.flower {
+  width: 100%;
+  height: auto;
 }
 
-#icover-snow {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
+.home-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.home-cta p {
+  max-width: 460px;
+  font-size: 16px;
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+.home-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  border-radius: 999px;
+  border: 2px solid #ffffff;
+  color: #1f6ff2;
+  background: #ffffff;
+  text-decoration: none;
+  font-weight: 600;
 }
 
 @media (max-width: 768px) {
@@ -443,6 +462,16 @@ input {
 
   .icon-btn {
     justify-self: center;
+  }
+
+  .home-header {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .home-nav {
+    flex-wrap: wrap;
+    justify-content: center;
   }
 }
 

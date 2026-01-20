@@ -7,25 +7,33 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
 </head>
 <body class="home-page">
-  <canvas id="icover-snow"></canvas>
-  <main class="home-hero centered">
-    <div class="glass-card hero-card auth-card">
+  <header class="home-header">
+    <div class="home-brand">icover</div>
+    <nav class="home-nav">
+      <a href="#home">inicio</a>
+      <a href="#lineup">lineup</a>
+      <a href="#schedule">cronograma</a>
+      <a href="#contact">contacto</a>
+    </nav>
+  </header>
+
+  <main class="home-hero" id="home">
+    <div class="flower-wrap">
+      <img
+        src="{{ url_for('static', filename='flower.svg') }}"
+        alt="Цветок"
+        class="flower"
+      />
+    </div>
+    <div class="home-cta" id="schedule">
       <img
         src="{{ url_for('static', filename='logo-icover.svg') }}"
         alt="iCover"
         class="hero-logo"
       />
-      <h1>График поставок</h1>
-      <p>
-        Планируйте поставки, выбирайте даты в календаре и подтверждайте прием на складе —
-        все в одном современном интерфейсе.
-      </p>
-      <div class="hero-actions">
-        <a class="primary-btn" href="{{ url_for('login') }}">Войти</a>
-      </div>
+      <p>Планируйте поставки, выбирайте даты и подтверждайте прием онлайн.</p>
+      <a class="home-btn" href="{{ url_for('login') }}">Войти</a>
     </div>
   </main>
-
-  <script src="{{ url_for('static', filename='icover-snow.js') }}"></script>
 </body>
 </html>
