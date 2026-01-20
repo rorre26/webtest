@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>График поставок — Вход</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+</head>
+<body class="login-page">
+  <canvas id="bg"></canvas>
+  <div class="glass-card">
+    <div class="brand">
+      <span class="brand-dot"></span>
+      <div>
+        <h1>График поставок</h1>
+        <p>Современный календарь для логистики</p>
+      </div>
+    </div>
+
+    <form method="post" class="form">
+      <label>
+        Логин
+        <input type="text" name="username" placeholder="Введите логин" required />
+      </label>
+      <label>
+        Пароль
+        <input type="password" name="password" placeholder="Введите пароль" required />
+      </label>
+      {% if error %}
+        <div class="form-error">{{ error }}</div>
+      {% endif %}
+      <button type="submit" class="primary-btn">Войти</button>
+    </form>
+
+    <div class="hint">
+      <h2>Демо-логины</h2>
+      <ul>
+        <li>office_user / office123 — офис</li>
+        <li>warehouse_user / warehouse123 — склад</li>
+      </ul>
+    </div>
+  </div>
+
+  <script type="module" src="{{ url_for('static', filename='three-bg.js') }}"></script>
+</body>
+</html>

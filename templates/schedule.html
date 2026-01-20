@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>График поставок — Панель</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+</head>
+<body class="schedule-page">
+  <canvas id="bg"></canvas>
+  <header class="top-bar">
+    <div>
+      <h1>График поставок</h1>
+      <p>Добро пожаловать, {{ user }} (роль: {{ role }})</p>
+    </div>
+    <a class="secondary-btn" href="{{ url_for('logout') }}">Выход</a>
+  </header>
+
+  <main class="content">
+    <section class="panel">
+      <div class="panel-header">
+        <h2>Календарь поставок</h2>
+        <span class="status-pill">Онлайн</span>
+      </div>
+
+      <div class="grid">
+        {% for delivery in deliveries %}
+          <article class="card">
+            <div class="card-header">
+              <h3>{{ delivery.car_number }}</h3>
+              <span class="tag {{ 'tag-accepted' if delivery.status == 'accepted' else 'tag-pending' }}">
+                {{ 'Принято' if delivery.status == 'accepted' else 'Ожидает подтверждения' }}
+              </span>
+            </div>
+            <p>Тип товара: <strong>{{ delivery.cargo_type }}</strong></p>
+            <p>Время прибытия: <strong>{{ delivery.arrival_time }}</strong></p>
+            <p>Создал: {{ delivery.created_by }}</p>
+            {% if delivery.accepted_by %}
+              <p>Принял: {{ delivery.accepted_by }}</p>
+            {% endif %}
+            {% if role == 'warehouse' and delivery.status != 'accepted' %}
+              <form method="post" action="{{ url_for('accept', delivery_id=delivery.id) }}">
+                <button class="primary-btn" type="submit">Подтвердить прием</button>
+              </form>
+            {% endif %}
+          </article>
+        {% else %}
+          <div class="empty-state">
+            <h3>Поставок пока нет</h3>
+            <p>Добавьте первую запись, чтобы сотрудники склада увидели новую поставку.</p>
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header">
+        <h2>Новая запись</h2>
+        <span class="status-pill muted">Доступно для офиса</span>
+      </div>
+      {% if role == 'office' %}
+        <form method="post" class="form">
+          <label>
+            Номер автомобиля
+            <input type="text" name="car_number" placeholder="Например, А123ВС" required />
+          </label>
+          <label>
+            Тип товара
+            <input type="text" name="cargo_type" placeholder="Например, продукты питания" required />
+          </label>
+          <label>
+            Время приезда водителя
+            <input type="datetime-local" name="arrival_time" required />
+          </label>
+          <button class="primary-btn" type="submit">Добавить в график</button>
+        </form>
+      {% else %}
+        <div class="empty-state">
+          <h3>Только для сотрудников офиса</h3>
+          <p>Войдите под офисным аккаунтом, чтобы добавлять новые записи.</p>
+        </div>
+      {% endif %}
+    </section>
+  </main>
+
+  <script type="module" src="{{ url_for('static', filename='three-bg.js') }}"></script>
+</body>
+</html>
