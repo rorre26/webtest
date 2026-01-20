@@ -2,7 +2,7 @@
   color-scheme: light;
   font-family: "Inter", "Segoe UI", system-ui, sans-serif;
   --bg: #0f172a;
-  --panel: rgba(255, 255, 255, 0.72);
+  --panel: rgba(255, 255, 255, 0.58);
   --text: #0f172a;
   --muted: #64748b;
   --primary: #4f46e5;
@@ -23,6 +23,19 @@ body {
   min-height: 100vh;
   background: radial-gradient(circle at top, #e2f0ff, #c7d9ff 20%, #98b5ff 60%, #4c6fff 100%);
   color: var(--text);
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.25;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><text x='10' y='70' font-family='Inter,Segoe UI,sans-serif' font-size='12' fill='%23ffffff'>icover</text></svg>");
+  background-size: 140px 140px;
+  animation: snow 20s linear infinite;
+  pointer-events: none;
 }
 
 #bg {
@@ -51,7 +64,7 @@ body {
   position: relative;
   z-index: 1;
   width: min(480px, 100%);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.6));
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.66), rgba(255, 255, 255, 0.48));
   border-radius: 24px;
   padding: 32px;
   backdrop-filter: blur(24px) saturate(150%);
@@ -154,7 +167,7 @@ input {
   width: min(1100px, 100%);
   margin: 0 auto;
   padding: 18px 28px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.6));
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.66), rgba(255, 255, 255, 0.48));
   border-radius: 20px;
   display: flex;
   align-items: center;
@@ -180,7 +193,7 @@ input {
 }
 
 .panel {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.55));
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.66), rgba(255, 255, 255, 0.44));
   border-radius: 20px;
   padding: 24px;
   backdrop-filter: blur(22px) saturate(150%);
@@ -218,7 +231,7 @@ input {
 .calendar {
   display: grid;
   gap: 16px;
-  background: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.44);
   border-radius: 16px;
   padding: 16px;
   border: 1px solid rgba(148, 163, 184, 0.3);
@@ -269,7 +282,7 @@ input {
 }
 
 .calendar-cell {
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.68);
   border-radius: 12px;
   border: 1px solid rgba(148, 163, 184, 0.3);
   padding: 10px 0;
@@ -309,7 +322,7 @@ input {
 }
 
 .card {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.6));
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.48));
   border-radius: 16px;
   padding: 18px;
   border: 1px solid rgba(148, 163, 184, 0.3);
@@ -347,6 +360,16 @@ input {
   padding: 16px;
   border: 1px dashed rgba(148, 163, 184, 0.6);
   border-radius: 16px;
+}
+
+@keyframes snow {
+  from {
+    background-position: 0 0;
+  }
+
+  to {
+    background-position: 0 400px;
+  }
 }
 
 .home-page {
