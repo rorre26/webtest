@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Photo project — портфолио фотографа</title>
+    <meta
+      name="description"
+      content="Портфолио фотографа: серии работ, кураторский отбор и быстрый контакт в один клик."
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preload" as="image" href="assets/hero.svg" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="logo" href="#home">Photo project</a>
+      <nav class="nav">
+        <a href="#home">Главная</a>
+        <a href="#series">Проекты</a>
+        <a href="#contact">Контакт</a>
+      </nav>
+      <a class="cta-link" href="https://t.me/yourname" target="_blank" rel="noreferrer">Написать в Telegram</a>
+    </header>
+
+    <main>
+      <section id="home" class="hero">
+        <div class="hero-media">
+          <picture>
+              <img src="assets/hero.svg" alt="Фотографическая серия" loading="eager" />
+          </picture>
+        </div>
+        <div class="hero-text reveal">
+          <p>Тихие истории про людей и пространство.</p>
+          <a class="cta-button" href="https://t.me/yourname" target="_blank" rel="noreferrer">
+            Записаться на съемку
+          </a>
+        </div>
+      </section>
+
+      <section class="featured" aria-labelledby="featured-title">
+        <div class="section-heading reveal">
+          <h2 id="featured-title">Ключевые серии</h2>
+          <p>Кураторский отбор, где каждая серия — самостоятельное высказывание.</p>
+        </div>
+        <div class="featured-grid">
+          <article class="featured-card reveal">
+            <div class="card-media">
+              <picture>
+              <img src="assets/series-01-1.svg" alt="Серия Городской свет" loading="lazy" />
+              </picture>
+            </div>
+            <div class="card-content">
+              <h3>Городской свет</h3>
+              <p>Ночные портреты, где свет становится сценографией.</p>
+              <a class="text-link" href="#series">Смотреть серию</a>
+            </div>
+          </article>
+          <article class="featured-card reveal">
+            <div class="card-media">
+              <picture>
+              <img src="assets/series-02-1.svg" alt="Серия Линии тишины" loading="lazy" />
+              </picture>
+            </div>
+            <div class="card-content">
+              <h3>Линии тишины</h3>
+              <p>Лайфстайл, который слышит паузы и дыхание.</p>
+              <a class="text-link" href="#series">Смотреть серию</a>
+            </div>
+          </article>
+          <article class="featured-card reveal">
+            <div class="card-media">
+              <picture>
+              <img src="assets/series-03-1.svg" alt="Серия Брендовые ритмы" loading="lazy" />
+              </picture>
+            </div>
+            <div class="card-content">
+              <h3>Брендовые ритмы</h3>
+              <p>Съемка для агентств и брендов: динамика, текстуры, масштаб.</p>
+              <a class="text-link" href="#series">Смотреть серию</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="cta-band reveal">
+        <p>Переходим сразу к диалогу — без форм и ожиданий.</p>
+        <div class="cta-actions">
+          <a class="cta-button" href="https://t.me/yourname" target="_blank" rel="noreferrer">Telegram</a>
+          <a class="ghost-button" href="mailto:hello@photoproject.com">Email</a>
+        </div>
+      </section>
+
+      <section id="series" class="series" aria-labelledby="series-title">
+        <div class="section-heading reveal">
+          <h2 id="series-title">Проекты / Серии</h2>
+          <p>Каждая серия — законченная история, выстроенная по ритму и свету.</p>
+        </div>
+
+        <article class="series-block reveal">
+          <div class="series-info">
+            <h3>Городской свет</h3>
+            <p>Ночные портреты, где архитектура становится частью образа.</p>
+          </div>
+          <div class="series-gallery">
+            <picture>
+              <img src="assets/series-01-1.svg" alt="Городской свет 01" loading="lazy" />
+            </picture>
+            <picture>
+              <img src="assets/series-01-2.svg" alt="Городской свет 02" loading="lazy" />
+            </picture>
+            <picture>
+              <img src="assets/series-01-3.svg" alt="Городской свет 03" loading="lazy" />
+            </picture>
+          </div>
+        </article>
+
+        <article class="series-block reveal">
+          <div class="series-info">
+            <h3>Линии тишины</h3>
+            <p>Лайфстайл-истории, снятые на длинном дыхании.</p>
+          </div>
+          <div class="series-gallery">
+            <picture>
+              <img src="assets/series-02-1.svg" alt="Линии тишины 01" loading="lazy" />
+            </picture>
+            <picture>
+              <img src="assets/series-02-2.svg" alt="Линии тишины 02" loading="lazy" />
+            </picture>
+            <picture>
+              <img src="assets/series-02-3.svg" alt="Линии тишины 03" loading="lazy" />
+            </picture>
+          </div>
+        </article>
+
+        <article class="series-block reveal">
+          <div class="series-info">
+            <h3>Брендовые ритмы</h3>
+            <p>Съемки для агентств: внимание к деталям и коммерческой задаче.</p>
+          </div>
+          <div class="series-gallery">
+            <picture>
+              <img src="assets/series-03-1.svg" alt="Брендовые ритмы 01" loading="lazy" />
+            </picture>
+            <picture>
+              <img src="assets/series-03-2.svg" alt="Брендовые ритмы 02" loading="lazy" />
+            </picture>
+            <picture>
+              <img src="assets/series-03-3.svg" alt="Брендовые ритмы 03" loading="lazy" />
+            </picture>
+          </div>
+        </article>
+      </section>
+
+      <section id="contact" class="contact reveal">
+        <div class="contact-text">
+          <h2>Контакт</h2>
+          <p>Давайте обсудим съемку — один клик до диалога.</p>
+        </div>
+        <div class="contact-actions">
+          <a class="cta-button" href="https://t.me/yourname" target="_blank" rel="noreferrer">Telegram</a>
+          <a class="ghost-button" href="mailto:hello@photoproject.com">Email</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>© 2024 Photo project</p>
+      <div class="footer-actions">
+        <a href="https://t.me/yourname" target="_blank" rel="noreferrer">Telegram</a>
+        <a href="mailto:hello@photoproject.com">Email</a>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
