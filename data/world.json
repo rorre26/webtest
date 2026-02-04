@@ -1,0 +1,52 @@
+{
+  "step": 40,
+  "walkInterval": 180,
+  "rooms": [
+    {
+      "id": "hall-1",
+      "title": "Входной зал",
+      "width": 620,
+      "paintings": [
+        {
+          "title": "Портреты",
+          "seriesId": "portraits",
+          "position": 120
+        },
+        {
+          "title": "Городской свет",
+          "seriesId": "city-lights",
+          "position": 360
+        }
+      ]
+    },
+    {
+      "id": "hall-2",
+      "title": "Новые истории",
+      "width": 720,
+      "paintings": [
+        {
+          "title": "Локации",
+          "seriesId": "locations",
+          "position": 140
+        },
+        {
+          "title": "Рассвет",
+          "seriesId": "dawn",
+          "position": 460
+        }
+      ]
+    },
+    {
+      "id": "hall-3",
+      "title": "Финальный зал",
+      "width": 520,
+      "paintings": [
+        {
+          "title": "Студия",
+          "seriesId": "studio",
+          "position": 200
+        }
+      ]
+    }
+  ]
+}

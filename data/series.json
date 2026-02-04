@@ -1,0 +1,79 @@
+{
+  "series": [
+    {
+      "id": "portraits",
+      "title": "Портреты",
+      "description": "Чистые портреты с мягким светом и акцентом на эмоцию.",
+      "images": [
+        {
+          "src": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=1200&q=80",
+          "alt": "Портрет 1"
+        },
+        {
+          "src": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1200&q=80",
+          "alt": "Портрет 2"
+        }
+      ]
+    },
+    {
+      "id": "city-lights",
+      "title": "Городской свет",
+      "description": "Ночная серия с контрастным светом и динамикой улиц.",
+      "images": [
+        {
+          "src": "https://images.unsplash.com/photo-1519996529931-28324d5a630e?auto=format&fit=crop&w=1200&q=80",
+          "alt": "Городской свет 1"
+        },
+        {
+          "src": "https://images.unsplash.com/photo-1486308510493-aa64833637b1?auto=format&fit=crop&w=1200&q=80",
+          "alt": "Городской свет 2"
+        }
+      ]
+    },
+    {
+      "id": "locations",
+      "title": "Локации",
+      "description": "Подборка атмосферных локаций для уличных съемок.",
+      "images": [
+        {
+          "src": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
+          "alt": "Локация 1"
+        },
+        {
+          "src": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",
+          "alt": "Локация 2"
+        }
+      ]
+    },
+    {
+      "id": "dawn",
+      "title": "Рассвет",
+      "description": "Серия на рассвете с мягким тёплым светом.",
+      "images": [
+        {
+          "src": "https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&w=1200&q=80",
+          "alt": "Рассвет 1"
+        },
+        {
+          "src": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1200&q=80",
+          "alt": "Рассвет 2"
+        }
+      ]
+    },
+    {
+      "id": "studio",
+      "title": "Студия",
+      "description": "Студийные кадры с контролируемым светом.",
+      "images": [
+        {
+          "src": "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=1200&q=80",
+          "alt": "Студия 1"
+        },
+        {
+          "src": "https://images.unsplash.com/photo-1459603677915-a62079ffd002?auto=format&fit=crop&w=1200&q=80",
+          "alt": "Студия 2"
+        }
+      ]
+    }
+  ]
+}
