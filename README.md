@@ -4,6 +4,8 @@
 
 ## Запуск
 
+### Вариант 1 (Linux/macOS)
+
 ```bash
 ./start.sh
 ```
@@ -14,4 +16,23 @@
 
 ```bash
 PORT=3000 ./start.sh
+```
+
+### Вариант 2 (Windows)
+
+```bat
+start.bat
+```
+
+Если нужен другой порт:
+
+```bat
+set PORT=3000
+start.bat
+```
+
+### Вариант 3 (вручную)
+
+```bash
+python3 -m http.server 8000
 ```
